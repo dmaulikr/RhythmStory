@@ -25,6 +25,8 @@ public class Main extends JFrame implements KeyListener
     int stringTime = 0;
     String currentString = "";
     
+    int points;
+    
     public Main()
     {
         setIgnoreRepaint(true);
@@ -80,13 +82,18 @@ public class Main extends JFrame implements KeyListener
                     g.fillRect(0,0,1024,768);
                      g.setColor(Color.blue);
                      g.fillRect(x1,y1,100,100);
+                     
+                     Font font = new Font("Serif", Font.PLAIN, 96);
+                     g.setFont(font);
+                     
+                     g.drawString(points+ "", 200, 120);
                     if (hit == false)
                     {
                         g.setColor(Color.red);
                         g.fillRect(x,y,100,100);
                          if (stringTime < 100)
                         {
-                            Font font = new Font("Serif", Font.PLAIN, 96);
+                            font = new Font("Serif", Font.PLAIN, 96);
                             g.setFont(font);
                             g.drawString(currentString, 500, 120); 
                             
@@ -98,10 +105,12 @@ public class Main extends JFrame implements KeyListener
                         if (time >= 96 && time <= 204)
                         {
                             currentString = "PERECT";
+                            points = points + 300;
                         }
                         else
                         {
                             currentString = "BAD";
+                            points = points + 100;
                         }
                         hit = false;
                         time = 0;
@@ -114,7 +123,7 @@ public class Main extends JFrame implements KeyListener
                     bs.show();
                     Toolkit.getDefaultToolkit().sync();
                     g.dispose();
-                    Thread.sleep(20);
+                    Thread.sleep(30);
                 }
                 catch (Exception e)
                 {
