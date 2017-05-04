@@ -7,11 +7,9 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Font;
+import java.util.*;
 public class Main extends JFrame implements KeyListener
 {
-    int x = 1024;
-    int y = 500;
- 
     int x1 = 200;
     int y1 = 500;
     
@@ -27,6 +25,12 @@ public class Main extends JFrame implements KeyListener
     
     int points;
     
+    ArrayList<Beat> beats = new ArrayList<Beat>();
+    
+    int beatTime = 0;
+    
+    int interval = 0;
+    
     public Main()
     {
         setIgnoreRepaint(true);
@@ -40,6 +44,8 @@ public class Main extends JFrame implements KeyListener
         getContentPane().add(panel);
         panel.setIgnoreRepaint(true);
         addKeyListener(this);
+        
+        beats.add(new Beat(true));
     }
     
     public void startNow()
@@ -50,14 +56,13 @@ public class Main extends JFrame implements KeyListener
     {
         
     }
-    public void keyPressed(KeyEvent e)
+    public synchronized void keyPressed(KeyEvent e)
     {
         if (e.getKeyCode() == (KeyEvent.VK_UP))
         {
-            
-                time = x;
+                time = beats.get(0).getX();
+                beats.remove(0);
                 hit = true;
-            
         }
     }
     public void keyReleased(KeyEvent e)
@@ -73,15 +78,38 @@ public class Main extends JFrame implements KeyListener
             {
                 try
                 {
-              
-                    x=x-20;
+                    for (int i = 0; i < beats.size(); i++)
+                    {
+                        beats.get(i).move();
+                    }
                     stringTime = stringTime + 10;
+                    beatTime = beatTime + 10;
+                    int type = (int)(Math.random()*3 + 1);
+                    if (type == 1)
+                    {
+                        interval = 20;
+                    }
+                    if (type == 2)
+                    {
+                        interval = 50;
+                    }
+                    if (type == 3)
+                    {
+                        interval = 70;
+                    }
+                    
+                    if (beatTime > interval)
+                    {
+                        beats.add(new Beat(true));
+                        beatTime = 0;
+                    }
+                    
                     
                     Graphics2D g = (Graphics2D)bs.getDrawGraphics();
                     g.setColor(Color.BLACK);
                     g.fillRect(0,0,1024,768);
-                     g.setColor(Color.blue);
-                     g.fillRect(x1,y1,100,100);
+                    g.setColor(Color.blue);
+                    g.fillRect(x1,y1,100,100);
                      
                      Font font = new Font("Serif", Font.PLAIN, 96);
                      g.setFont(font);
@@ -90,18 +118,19 @@ public class Main extends JFrame implements KeyListener
                     if (hit == false)
                     {
                         g.setColor(Color.red);
-                        g.fillRect(x,y,100,100);
-                         if (stringTime < 100)
+                        for (int i = 0; i < beats.size(); i++)
                         {
-                            font = new Font("Serif", Font.PLAIN, 96);
-                            g.setFont(font);
-                            g.drawString(currentString, 500, 120); 
+                            g.fillRect(beats.get(i).getX(),beats.get(i).getY(),100,100);
+                        }
+                        if (stringTime < 100)
+                        {
                             
+                            g.drawString(currentString, 500, 120);
                         }
                     }
                     else
                     {
-                        x = 1024;
+                      
                         if (time >= 96 && time <= 204)
                         {
                             currentString = "PERECT";
@@ -116,9 +145,9 @@ public class Main extends JFrame implements KeyListener
                         time = 0;
                         stringTime = 0;
                     }
-                    if (x <= 0)
+                    if (beats.get(0).getX() <= 0)
                     {
-                        x = 1024;
+                        beats.remove(0);
                     }
                     bs.show();
                     Toolkit.getDefaultToolkit().sync();
