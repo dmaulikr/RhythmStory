@@ -8,6 +8,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Font;
 import java.util.*;
+import java.awt.image.*;
+import java.io.*;
+import javax.imageio.*;
 public class Main extends JFrame implements KeyListener
 {
     boolean isUpPressed, isDownPressed;
@@ -27,11 +30,17 @@ public class Main extends JFrame implements KeyListener
     int points;
     
     ArrayList<Beat> beats = new ArrayList<Beat>();
+    int[] intervals = new int[1000];
     
     int beatTime = 0;
     
     int interval = 0;
     
+    int intervalCounter = 0;
+    
+    boolean generating = true; //if a beat has been added yet or not
+    
+    BufferedImage image;
     public Main()
     {
         setIgnoreRepaint(true);
@@ -45,7 +54,7 @@ public class Main extends JFrame implements KeyListener
         getContentPane().add(panel);
         panel.setIgnoreRepaint(true);
         addKeyListener(this);
-        
+        generateBeats();
         beats.add(new Beat(true));
     }
     
@@ -62,13 +71,17 @@ public class Main extends JFrame implements KeyListener
         if (e.getKeyCode() == (KeyEvent.VK_UP))
         {
             time = beats.get(0).getX();
+            beats.add(new Beat(true));
             beats.remove(0);
+            
             hit = true;
         }
         if (e.getKeyCode() == (KeyEvent.VK_DOWN))
         {
             time = beats.get(0).getX();
+            beats.add(new Beat(true));
             beats.remove(0);
+            
             hit = true;
         }
         switch(e.getKeyCode()) {
@@ -102,33 +115,14 @@ public class Main extends JFrame implements KeyListener
                         beats.get(i).move();
                     }
                     stringTime = stringTime + 10;
-                    beatTime = beatTime + 10;
-                    int type = (int)(Math.random()*3 + 1);
-                    if (type == 1)
-                    {
-                        interval = 20;
-                    }
-                    if (type == 2)
-                    {
-                        interval = 50;
-                    }
-                    if (type == 3)
-                    {
-                        interval = 70;
-                    }
-                    
-                    if (beatTime > interval)
-                    {
-                        beats.add(new Beat(true));
-                        beatTime = 0;
-                    }
-                    
+                   
+                    nextBeat();
                     
                     Graphics2D g = (Graphics2D)bs.getDrawGraphics();
                     g.setColor(Color.BLACK);
                     g.fillRect(0,0,1024,768);
                     g.setColor(Color.blue);
-                    g.fillRect(x1,y1,100,100);
+                    g.fillRect(x1,y1,75,75);
                      
                      Font font = new Font("Serif", Font.PLAIN, 96);
                      g.setFont(font);
@@ -139,7 +133,8 @@ public class Main extends JFrame implements KeyListener
                         g.setColor(Color.red);
                         for (int i = 0; i < beats.size(); i++)
                         {
-                            g.fillRect(beats.get(i).getX(),beats.get(i).getY(),100,100);
+                            getImage();
+                            g.drawImage(image, beats.get(i).getX(), beats.get(i).getY(),null);
                         }
                         if (stringTime < 100)
                         {
@@ -149,7 +144,6 @@ public class Main extends JFrame implements KeyListener
                     }
                     else
                     {
-                      
                         if (time >= 96 && time <= 204)
                         {
                             currentString = "PERECT";
@@ -171,7 +165,7 @@ public class Main extends JFrame implements KeyListener
                     bs.show();
                     Toolkit.getDefaultToolkit().sync();
                     g.dispose();
-                    Thread.sleep(30);
+                    Thread.sleep(20);
                 }
                 catch (Exception e)
                 {
@@ -180,7 +174,45 @@ public class Main extends JFrame implements KeyListener
             }
         }
      }
-    
+    public void generateBeats()
+    {
+        for (int i = 0; i < intervals.length; i++)
+        {
+            int type = (int)(Math.random()*3 + 1);
+            if (type == 1)
+            {
+                intervals[i] = 120;
+            }
+            if (type == 2)
+            {
+                intervals[i] = 220;
+            }
+            if (type == 3)
+            {
+                intervals[i] = 300;
+            }
+        }
+    }
+    public void nextBeat()
+    {
+        beatTime = beatTime + 20;
+        if (beatTime == intervals[intervalCounter])
+        {
+            beats.add(new Beat(true));
+            beatTime = 0;
+        }
+    }
+    public void getImage()
+    {
+        try
+        {
+            image = ImageIO.read(new File("circle.png"));
+        }
+        catch (Exception e)
+        {
+        }
+    }
+     
     public static void main(String[] args)
     {
         Main main = new Main();
