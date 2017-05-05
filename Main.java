@@ -10,6 +10,7 @@ import java.awt.Font;
 import java.util.*;
 public class Main extends JFrame implements KeyListener
 {
+    boolean isUpPressed, isDownPressed;
     int x1 = 200;
     int y1 = 500;
     
@@ -60,16 +61,34 @@ public class Main extends JFrame implements KeyListener
     {
         if (e.getKeyCode() == (KeyEvent.VK_UP))
         {
-                time = beats.get(0).getX();
-                beats.remove(0);
-                hit = true;
+            time = beats.get(0).getX();
+            beats.remove(0);
+            hit = true;
+        }
+        if (e.getKeyCode() == (KeyEvent.VK_DOWN))
+        {
+            time = beats.get(0).getX();
+            beats.remove(0);
+            hit = true;
+        }
+        switch(e.getKeyCode()) {
+            case KeyEvent.VK_UP: isUpPressed = true; break;
+            case KeyEvent.VK_DOWN: isDownPressed = true; break;
+        }
+        if(isUpPressed && isDownPressed)
+        {
+            time = beats.get(0).getX();
+            beats.remove(0);
+            hit = true;
         }
     }
     public void keyReleased(KeyEvent e)
     {
-       
+               switch(e.getKeyCode()) {
+            case KeyEvent.VK_UP: isUpPressed = false; break;
+            case KeyEvent.VK_DOWN: isDownPressed = false; break;
+        }
     }
-        
     public class DrawPanel extends JPanel
     {
         public void drawStuff()
