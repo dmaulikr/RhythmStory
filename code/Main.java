@@ -78,17 +78,17 @@ public class Main extends JFrame implements KeyListener
     }
     public synchronized void keyPressed(KeyEvent e)
     { 
-        
+       stringTime = 0;
        if (e.getKeyCode() == (KeyEvent.VK_LEFT))
         {
-            if (beats.get(beatCounter).getColor() != 1)
+            if (beats.get(beatCounter).getColor() != 1 || isRightPressed == true)
             {
-                
+                accuracyString = "Miss";
             }
             else
             {
                 time = beats.get(beatCounter).getX();
-                if (calculatePosition() < 100 && calculatePosition() >= 40)
+                if (calculatePosition() <= 105 && calculatePosition() >= 25)
                 {
                     beats.get(beatCounter).hit();
                     ++beatCounter;
@@ -99,13 +99,14 @@ public class Main extends JFrame implements KeyListener
         }
         if (e.getKeyCode() == (KeyEvent.VK_RIGHT))
         {  
-            if (beats.get(beatCounter).getColor() != 2)
+            if (beats.get(beatCounter).getColor() != 2 || isLeftPressed == true)
             {
+                accuracyString = "Miss";
             }
             else
             {
                 time = beats.get(beatCounter).getX();
-                if (calculatePosition() < 100 && calculatePosition() >= 40)
+                if (calculatePosition() <= 105 && calculatePosition() >= 25)
                 {
                     beats.get(beatCounter).hit();
                     ++beatCounter;
@@ -124,11 +125,12 @@ public class Main extends JFrame implements KeyListener
         {
              if (beats.get(beatCounter).getColor() != 3)
             {
+                accuracyString = "Miss";
             }
             else
             {
                 time = beats.get(0).getX();
-                if (calculatePosition() < 100 && calculatePosition() >= 40)
+                if (calculatePosition() <= 105 && calculatePosition() >= 25)
                 {
                     beats.get(beatCounter).hit();
                     ++beatCounter;
@@ -174,43 +176,27 @@ public class Main extends JFrame implements KeyListener
                     Font font = new Font("Serif", Font.PLAIN, 96);
                     g.setFont(font);
                      
-                    g.drawString(accuracyString, 200, 120);
-                    g.drawString(time + "", 200, 120);
-                    if (hit == false)
-                    {
-                        g.setColor(Color.red);
-                        for (int i = 0; i < beats.size(); i++) //draws each beat in the beat list
-                        {
-                            if (beats.get(i).getHit() == false)
-                            {
-                                g.drawImage(ImageIO.read(new File(beats.get(i).getFile())), beats.get(i).getX(), beats.get(i).getY(),null);
-                            }
-                        }
-                        if (stringTime < 400)
-                        {
-                            g.drawString(accuracyString, 500, 120);
-                            g.drawString(time + "", 200, 120);
-                        }
-                    }
-                    else
-                    {
-                        if (time >= 96 && time <= 204)
-                        {
-                            accuracyString = "PERECT";
-                            points = points + 300;
-                        }
-                        else
-                        {
-                            accuracyString = "BAD";
-                            points = points + 100;
-                        }
-                        hit = false;
+                    g.drawString(points + "", 200, 120);
+                    
+                    g.setColor(Color.red);
                         
-                        stringTime = 0;
+                    for (int i = 0; i < beats.size(); i++) //draws each beat in the beat list
+                    {
+                        if (beats.get(i).getHit() == false)
+                        {
+                            g.drawImage(ImageIO.read(new File(beats.get(i).getFile())), beats.get(i).getX(), beats.get(i).getY(),null);
+                        }
                     }
+                    if (stringTime < 400)
+                    {
+                        g.drawString(accuracyString, 500, 120);
+                        g.drawString(time + "", 200, 120);
+                    }             
                     if (beats.get(beatCounter).getX() <= 0)
                     {
                         beats.get(beatCounter).hit();
+                        accuracyString = "Miss";
+                        stringTime = 0;
                         ++beatCounter;
                     }
                     bs.show();
@@ -229,18 +215,18 @@ public class Main extends JFrame implements KeyListener
     {
         for (int i = 0; i < intervals.length; i++)
         {
-            int type = (int)(Math.random()*3 + 1);
-            if (type == 1)
+            int roll = (int)(Math.random()*10 + 1);
+            if (roll >= 8)
             {
-                intervals[i] = 500;
+                intervals[i] = 20;
             }
-            if (type == 2)
+            if (roll < 4)
             {
-                intervals[i] = 600;
+                intervals[i] = 100;
             }
-            if (type == 3)
+            else
             {
-                intervals[i] = 800;
+                intervals[i] = 200;
             }
         }
     }
@@ -262,7 +248,7 @@ public class Main extends JFrame implements KeyListener
     }
     public void nextBeat() //adds a beat to the beatlist
     {
-        beatTime = beatTime + 10;
+        beatTime = beatTime + 5;
         if (beatTime == intervals[intervalCounter])
         {
             beats.add(new Beat(generateColor()));
@@ -273,17 +259,24 @@ public class Main extends JFrame implements KeyListener
     public int calculatePosition() //all the calculations when a button is pressed
     {
         int position = beats.get(beatCounter).getX();
-        if (position <= 18 && position >= 10)
+        if (position <= 45 && position >= 35)
         {
             accuracyString = "Perfect";
+            points = points + 300;
         }
-        else if (position > 20)
+        else if ((position > 45 && position <= 55) || (position >= 30 && position < 35))
         {
+            accuracyString = "Good";
+            points = points + 50;
+        }
+        else if ((position < 30 && position >= 25) || (position > 55 && position <= 105))
+        {
+            points = points + 100;
             accuracyString = "Bad";
         }
         else
         {
-            accuracyString = "Good";
+            accuracyString = "Miss";
         }
         return position;
     }

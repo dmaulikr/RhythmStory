@@ -6,7 +6,7 @@ public class Beat
     boolean hit = false;
     public Beat(int c)
     {
-        x = 1024;
+        x = 1025;
         y = 605;
         color = c;
     }
