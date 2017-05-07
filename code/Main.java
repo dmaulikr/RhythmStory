@@ -58,7 +58,8 @@ public class Main extends JFrame implements KeyListener
     
     Graphics2D g;
     
-    
+    int attackSpriteCounter = 9; //determines which sprite to draw;
+    int attackSpriteTimer = 0;
     public Main()
     {
         setIgnoreRepaint(true);
@@ -184,12 +185,26 @@ public class Main extends JFrame implements KeyListener
                     
                     g.setColor(Color.BLACK);
                     g.fillRect(0,0,900,178);
-                    g.drawImage(images.get(3), 0, 178 ,null); 
+                    g.drawImage(images.get(3), 0, 178 ,null); //draws top of background
                     g.drawImage(images.get(4), 140, 50,null); //draws the target
                     g.drawImage(images.get(getAccuracy() + 4), 0, 0,null); 
-                                        
-                   
+                    {
+                        attackSpriteTimer = attackSpriteTimer + 10;
+                        if (attackSpriteTimer == 150)
+                        {
+                            g.drawImage(images.get(12), 0, 303,null); //draws middle of background;
+                            g.drawImage(images.get(attackSpriteCounter), 350, 570,null);
+                            attackSpriteTimer = 0;
+                            ++attackSpriteCounter;
+                        }
+                        if (attackSpriteCounter == 12)
+                        {
+                            attackSpriteCounter = 9;
+                        }
+                    }//draws the attack sprite
                     
+                    
+                     
                     
                     
                     for (int i = beatCounter; i < beats.size(); i++) //draws each beat in the beat list
@@ -335,6 +350,10 @@ public class Main extends JFrame implements KeyListener
             images.add(ImageIO.read(new File("assets\\faceGood.png"))); //6
             images.add(ImageIO.read(new File("assets\\faceBad.png"))); //7
             images.add(ImageIO.read(new File("assets\\faceMiss.png"))); //8
+            images.add(ImageIO.read(new File("assets\\attack1.png"))); //9
+            images.add(ImageIO.read(new File("assets\\attack2.png"))); //10
+            images.add(ImageIO.read(new File("assets\\attack3.png"))); //11
+            images.add(ImageIO.read(new File("assets\\backgroundMid.jpg"))); //12
         }
         catch (Exception e)
         {
