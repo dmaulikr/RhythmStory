@@ -61,7 +61,7 @@ public class Main extends JFrame implements KeyListener
         setIgnoreRepaint(true);
         setTitle("RhythmStory");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1024,720);
+        setSize(900,720);
         setResizable(false);
         setVisible(true);
         createBufferStrategy(2);
@@ -180,10 +180,10 @@ public class Main extends JFrame implements KeyListener
                     nextBeat(); //creates the next beat
                     
                     g.setColor(Color.BLACK);
-                    g.fillRect(0,575,1024,178);
-                    g.drawImage(images.get(3), 0, 0 ,null); //draws the target
-                    g.drawImage(images.get(4), 40, 600,null); //draws the target
-                        
+                    g.fillRect(0,0,900,178);
+                    g.drawImage(images.get(3), 0, 178 ,null); //draws the target
+                    g.drawImage(images.get(4), 40, 50,null); //draws the target
+                    g.drawImage(images.get(getAccuracy() + 4), 0, 0,null); //draws the target
                     for (int i = beatCounter; i < beats.size(); i++) //draws each beat in the beat list
                     {
                         if (beats.get(i).getHit() == false)
@@ -193,8 +193,7 @@ public class Main extends JFrame implements KeyListener
                     }
                     if (stringTime < 400)
                     {
-                        g.drawString(accuracyString, 500, 120);
-                        g.drawString(time + "", 200, 120);
+                        
                     }             
                     if (beats.get(beatCounter).getX() <= 0)
                     {
@@ -284,6 +283,22 @@ public class Main extends JFrame implements KeyListener
         }
         return position;
     }
+    public int getAccuracy() //returns the accuray of the note
+    {
+        if (accuracyString.equals("Miss"))
+        {
+            return 4;
+        }
+        else if (accuracyString.equals("Good"))
+        {
+            return 2;
+        }
+        else if (accuracyString.equals("Bad"))
+        {
+            return 3;
+        }
+        return 1;
+    }
     public void playMusic()
     {
         try
@@ -303,11 +318,15 @@ public class Main extends JFrame implements KeyListener
     {
         try
         {
-            images.add(ImageIO.read(new File("assets\\beatRed.png")));
-            images.add(ImageIO.read(new File("assets\\beatBlue.png")));
-            images.add(ImageIO.read(new File("assets\\beatBoth.png")));
-            images.add(ImageIO.read(new File("assets\\backgroundTop.jpg")));
-            images.add(ImageIO.read(new File("assets\\target.png")));
+            images.add(ImageIO.read(new File("assets\\beatRed.png"))); //0
+            images.add(ImageIO.read(new File("assets\\beatBlue.png"))); //1
+            images.add(ImageIO.read(new File("assets\\beatBoth.png"))); //2
+            images.add(ImageIO.read(new File("assets\\backgroundTop.jpg"))); //3
+            images.add(ImageIO.read(new File("assets\\target.png"))); //4
+            images.add(ImageIO.read(new File("assets\\facePerfect.png"))); //5
+            images.add(ImageIO.read(new File("assets\\faceGood.png"))); //6
+            images.add(ImageIO.read(new File("assets\\faceBad.png"))); //7
+            images.add(ImageIO.read(new File("assets\\faceMiss.png"))); //8
         }
         catch (Exception e)
         {
@@ -324,8 +343,8 @@ public class Main extends JFrame implements KeyListener
     {
         try
         {
-            g.drawImage(ImageIO.read(new File("assets\\background.jpg")), 0, 0,null);
-            g.drawImage(ImageIO.read(new File("assets\\floor.png")), 0, 477,null);
+            g.drawImage(ImageIO.read(new File("assets\\background.jpg")), 0, 178,null);
+            g.drawImage(ImageIO.read(new File("assets\\floor.png")), 0, 622,null);
             
         }
         catch (Exception e)
