@@ -3,6 +3,7 @@ public class Beat
     int x;
     int y;
     int color; //1 = red 2 = blue 3 = both
+    boolean hit = false;
     public Beat(int c)
     {
         x = 1024;
@@ -23,7 +24,15 @@ public class Beat
     }
     public void move()
     {
-        x = x - 10;
+        x = x - 5;
+    }
+    public void hit()
+    {
+        hit = true;
+    }
+    public boolean getHit()
+    {
+        return hit;
     }
     public String getFile()
     {

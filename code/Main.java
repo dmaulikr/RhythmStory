@@ -32,6 +32,8 @@ public class Main extends JFrame implements KeyListener
     
     int points; //the player's points
     
+    int pressedPosition;
+    
     ArrayList<Beat> beats = new ArrayList<Beat>(); //arraylist to store all of the beats created
     int[] intervals = new int[1000]; //array to store all the pregenerated intervals
     
@@ -46,6 +48,8 @@ public class Main extends JFrame implements KeyListener
     BufferedImage image; //stores the image
     
     int health; //the player's health
+    
+    int beatCounter = 0;
     public Main()
     {
         setIgnoreRepaint(true);
@@ -65,7 +69,7 @@ public class Main extends JFrame implements KeyListener
     
     public void startNow()
     {
-        playMusic();
+        //playMusic();
         panel.drawStuff();
     }
     public void keyTyped(KeyEvent e)
@@ -76,12 +80,26 @@ public class Main extends JFrame implements KeyListener
     {
         if (e.getKeyCode() == (KeyEvent.VK_LEFT))
         {
-                time = beats.get(0).getX();
+            
+                time = beats.get(beatCounter).getX();
+                if (calculatePosition() < 100 && calculatePosition() > 10)
+                {
+                    beats.get(beatCounter).hit();
+                    ++beatCounter;
+                    
+                }
                 hit = true;
+            
         }
         if (e.getKeyCode() == (KeyEvent.VK_RIGHT))
         {            
-                time = beats.get(0).getX();
+                time = beats.get(beatCounter).getX();
+                if (calculatePosition() < 100 && calculatePosition() > 10)
+                {
+                    beats.get(beatCounter).hit();
+                    ++beatCounter;
+                    
+                }
                 hit = true;
         }
         switch(e.getKeyCode()) {
@@ -121,24 +139,29 @@ public class Main extends JFrame implements KeyListener
                     
                     
                     g.setColor(Color.BLACK);
-                    g.fillRect(0,575,1024,178);
+                    g.fillRect(0,0,1024,720);
                     
                     g.drawImage(ImageIO.read(new File("assets\\target.png")), 10, 600,null); //draws the target
                      
                     Font font = new Font("Serif", Font.PLAIN, 96);
                     g.setFont(font);
                      
-                    g.drawString(points+ "", 200, 120);
+                    g.drawString(accuracyString, 200, 120);
+                    g.drawString(time + "", 200, 120);
                     if (hit == false)
                     {
                         g.setColor(Color.red);
                         for (int i = 0; i < beats.size(); i++) //draws each beat in the beat list
                         {
-                            g.drawImage(ImageIO.read(new File(beats.get(i).getFile())), beats.get(i).getX(), beats.get(i).getY(),null);
+                            if (beats.get(i).getHit() == false)
+                            {
+                                g.drawImage(ImageIO.read(new File(beats.get(i).getFile())), beats.get(i).getX(), beats.get(i).getY(),null);
+                            }
                         }
                         if (stringTime < 100)
                         {
                             g.drawString(accuracyString, 500, 120);
+                            g.drawString(time + "", 200, 120);
                         }
                     }
                     else
@@ -154,17 +177,18 @@ public class Main extends JFrame implements KeyListener
                             points = points + 100;
                         }
                         hit = false;
-                        time = 0;
+                        
                         stringTime = 0;
                     }
-                    if (beats.get(0).getX() <= 10)
+                    if (beats.get(beatCounter).getX() <= 0)
                     {
-                        beats.remove(0);
+                        beats.get(beatCounter).hit();
+                        ++beatCounter;
                     }
                     bs.show();
                     Toolkit.getDefaultToolkit().sync();
                     g.dispose();
-                    Thread.sleep(20);
+                    Thread.sleep(10);
                 }
                 catch (Exception e)
                 {
@@ -180,15 +204,15 @@ public class Main extends JFrame implements KeyListener
             int type = (int)(Math.random()*3 + 1);
             if (type == 1)
             {
-                intervals[i] = 140;
+                intervals[i] = 500;
             }
             if (type == 2)
             {
-                intervals[i] = 220;
+                intervals[i] = 600;
             }
             if (type == 3)
             {
-                intervals[i] = 360;
+                intervals[i] = 800;
             }
         }
     }
@@ -210,7 +234,7 @@ public class Main extends JFrame implements KeyListener
     }
     public void nextBeat() //adds a beat to the beatlist
     {
-        beatTime = beatTime + 20;
+        beatTime = beatTime + 10;
         if (beatTime == intervals[intervalCounter])
         {
             beats.add(new Beat(generateColor()));
@@ -220,7 +244,20 @@ public class Main extends JFrame implements KeyListener
     }
     public int calculatePosition() //all the calculations when a button is pressed
     {
-        return Math.abs(beats.get(0).getX() - 15);
+        int position = beats.get(beatCounter).getX();
+        if (position <= 18 && position >= 10)
+        {
+            accuracyString = "Perfect";
+        }
+        else if (position > 20)
+        {
+            accuracyString = "Bad";
+        }
+        else
+        {
+            accuracyString = "Good";
+        }
+        return position;
     }
     public void playMusic()
     {
