@@ -14,6 +14,9 @@ import javax.imageio.*;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import java.awt.Image;
+import java.net.URL;
+import javax.swing.ImageIcon;
 public class Main extends JFrame implements KeyListener
 {
     boolean isLeftPressed, isRightPressed;
@@ -97,7 +100,7 @@ public class Main extends JFrame implements KeyListener
             else
             {
                 time = beats.get(beatCounter).getX();
-                if (calculatePosition() <= 105 && calculatePosition() >= 25)
+                if (calculatePosition() <= 205 && calculatePosition() >= 125)
                 {
                     beats.get(beatCounter).hit();
                     ++beatCounter;
@@ -115,7 +118,7 @@ public class Main extends JFrame implements KeyListener
             else
             {
                 time = beats.get(beatCounter).getX();
-                if (calculatePosition() <= 105 && calculatePosition() >= 25)
+                if (calculatePosition() <= 205 && calculatePosition() >= 125)
                 {
                     beats.get(beatCounter).hit();
                     ++beatCounter;
@@ -139,7 +142,7 @@ public class Main extends JFrame implements KeyListener
             else
             {
                 time = beats.get(0).getX();
-                if (calculatePosition() <= 105 && calculatePosition() >= 25)
+                if (calculatePosition() <= 205 && calculatePosition() >= 125)
                 {
                     beats.get(beatCounter).hit();
                     ++beatCounter;
@@ -181,9 +184,14 @@ public class Main extends JFrame implements KeyListener
                     
                     g.setColor(Color.BLACK);
                     g.fillRect(0,0,900,178);
-                    g.drawImage(images.get(3), 0, 178 ,null); //draws the target
-                    g.drawImage(images.get(4), 40, 50,null); //draws the target
-                    g.drawImage(images.get(getAccuracy() + 4), 0, 0,null); //draws the target
+                    g.drawImage(images.get(3), 0, 178 ,null); 
+                    g.drawImage(images.get(4), 140, 50,null); //draws the target
+                    g.drawImage(images.get(getAccuracy() + 4), 0, 0,null); 
+                                        
+                   
+                    
+                    
+                    
                     for (int i = beatCounter; i < beats.size(); i++) //draws each beat in the beat list
                     {
                         if (beats.get(i).getHit() == false)
@@ -262,17 +270,17 @@ public class Main extends JFrame implements KeyListener
     public int calculatePosition() //all the calculations when a button is pressed
     {
         int position = beats.get(beatCounter).getX();
-        if (position <= 45 && position >= 35)
+        if (position <= 145 && position >= 135)
         {
             accuracyString = "Perfect";
             points = points + 300;
         }
-        else if ((position > 45 && position <= 55) || (position >= 30 && position < 35))
+        else if ((position > 145 && position <= 155) || (position >= 130 && position < 135))
         {
             accuracyString = "Good";
             points = points + 50;
         }
-        else if ((position < 30 && position >= 25) || (position > 55 && position <= 105))
+        else if ((position < 130 && position >= 125) || (position > 155 && position <= 205))
         {
             points = points + 100;
             accuracyString = "Bad";
@@ -345,6 +353,10 @@ public class Main extends JFrame implements KeyListener
         {
             g.drawImage(ImageIO.read(new File("assets\\background.jpg")), 0, 178,null);
             g.drawImage(ImageIO.read(new File("assets\\floor.png")), 0, 622,null);
+            /*
+            Image icon = new ImageIcon(getClass().getResource("assets\\zakum.gif")).ge‌​tImage();
+            g.drawImage(icon, 100, 200, this);
+            */
             
         }
         catch (Exception e)
