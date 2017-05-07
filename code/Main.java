@@ -18,6 +18,7 @@ public class Main extends JFrame implements KeyListener
 {
     boolean isLeftPressed, isRightPressed;
     
+    boolean drawn = false; //whether bg drawn or not.
     boolean hit = false; //whether the beat was hit or not
     
     int time = 0; //how much time has passed
@@ -26,7 +27,7 @@ public class Main extends JFrame implements KeyListener
     
     DrawPanel panel = new DrawPanel();
     
-    int stringTime = 0; //keeps track of how long to display the accuracy string
+    int stringTime = 400; //keeps track of how long to display the accuracy string
     
     String accuracyString = ""; //bad/good/perfect
     
@@ -34,6 +35,7 @@ public class Main extends JFrame implements KeyListener
     
     int pressedPosition;
     
+    ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
     ArrayList<Beat> beats = new ArrayList<Beat>(); //arraylist to store all of the beats created
     int[] intervals = new int[1000]; //array to store all the pregenerated intervals
     
@@ -50,6 +52,10 @@ public class Main extends JFrame implements KeyListener
     int health; //the player's health
     
     int beatCounter = 0;
+    
+    Graphics2D g;
+    
+    
     public Main()
     {
         setIgnoreRepaint(true);
@@ -64,12 +70,15 @@ public class Main extends JFrame implements KeyListener
         panel.setIgnoreRepaint(true);
         addKeyListener(this);
         generateBeats();
+        storeImages();
+        g = (Graphics2D)bs.getDrawGraphics();
         beats.add(new Beat(1));
     }
     
     public void startNow()
     {
         //playMusic();
+        loadBackground();
         panel.drawStuff();
     }
     public void keyTyped(KeyEvent e)
@@ -157,34 +166,29 @@ public class Main extends JFrame implements KeyListener
             {
                 try
                 {
-                    Graphics2D g = (Graphics2D)bs.getDrawGraphics(); //refreshes the screen
-                    
-                    for (int i = 0; i < beats.size(); i++) //moves every beat across the screen
+                     //refreshes the screen
+                    g = (Graphics2D)bs.getDrawGraphics();
+                    Font font = new Font("Serif", Font.PLAIN, 96);
+                    g.setFont(font);
+                    for (int i = beatCounter; i < beats.size(); i++) //moves every beat across the screen
                     {
                         beats.get(i).move();
                     }
+          
                     stringTime = stringTime + 20; //increments how long the string has been displayed for
                    
                     nextBeat(); //creates the next beat
                     
-                    
                     g.setColor(Color.BLACK);
-                    g.fillRect(0,0,1024,720);
-                    
-                    g.drawImage(ImageIO.read(new File("assets\\target.png")), 40, 600,null); //draws the target
-                     
-                    Font font = new Font("Serif", Font.PLAIN, 96);
-                    g.setFont(font);
-                     
-                    g.drawString(points + "", 200, 120);
-                    
-                    g.setColor(Color.red);
+                    g.fillRect(0,575,1024,178);
+                    g.drawImage(images.get(3), 0, 0 ,null); //draws the target
+                    g.drawImage(images.get(4), 40, 600,null); //draws the target
                         
-                    for (int i = 0; i < beats.size(); i++) //draws each beat in the beat list
+                    for (int i = beatCounter; i < beats.size(); i++) //draws each beat in the beat list
                     {
                         if (beats.get(i).getHit() == false)
                         {
-                            g.drawImage(ImageIO.read(new File(beats.get(i).getFile())), beats.get(i).getX(), beats.get(i).getY(),null);
+                            g.drawImage(images.get(beats.get(i).getColor() - 1), beats.get(i).getX(), beats.get(i).getY(),null);
                         }
                     }
                     if (stringTime < 400)
@@ -295,22 +299,38 @@ public class Main extends JFrame implements KeyListener
             ex.printStackTrace();
         }
     }
+    public void storeImages()
+    {
+        try
+        {
+            images.add(ImageIO.read(new File("assets\\beatRed.png")));
+            images.add(ImageIO.read(new File("assets\\beatBlue.png")));
+            images.add(ImageIO.read(new File("assets\\beatBoth.png")));
+            images.add(ImageIO.read(new File("assets\\backgroundTop.jpg")));
+            images.add(ImageIO.read(new File("assets\\target.png")));
+        }
+        catch (Exception e)
+        {
+        }
+    }
     public static void main(String[] args)
     {
         Main main = new Main();
         main.startNow();
     }
     
-    /*
-    public void getImage(String file) //stores an image 
+    
+    public void loadBackground() //stores an image 
     {
         try
         {
-            image = ImageIO.read(new File(file));
+            g.drawImage(ImageIO.read(new File("assets\\background.jpg")), 0, 0,null);
+            g.drawImage(ImageIO.read(new File("assets\\floor.png")), 0, 477,null);
+            
         }
         catch (Exception e)
         {
         }
     }
-    */
+    
 }
