@@ -77,46 +77,74 @@ public class Main extends JFrame implements KeyListener
         
     }
     public synchronized void keyPressed(KeyEvent e)
-    {
-        if (e.getKeyCode() == (KeyEvent.VK_LEFT))
+    { 
+        
+       if (e.getKeyCode() == (KeyEvent.VK_LEFT))
         {
-            
+            if (beats.get(beatCounter).getColor() != 1)
+            {
+                
+            }
+            else
+            {
                 time = beats.get(beatCounter).getX();
-                if (calculatePosition() < 100 && calculatePosition() > 10)
+                if (calculatePosition() < 100 && calculatePosition() >= 40)
                 {
                     beats.get(beatCounter).hit();
                     ++beatCounter;
                     
                 }
                 hit = true;
-            
+            }
         }
         if (e.getKeyCode() == (KeyEvent.VK_RIGHT))
-        {            
+        {  
+            if (beats.get(beatCounter).getColor() != 2)
+            {
+            }
+            else
+            {
                 time = beats.get(beatCounter).getX();
-                if (calculatePosition() < 100 && calculatePosition() > 10)
+                if (calculatePosition() < 100 && calculatePosition() >= 40)
                 {
                     beats.get(beatCounter).hit();
                     ++beatCounter;
                     
                 }
                 hit = true;
-        }
-        switch(e.getKeyCode()) {
+            }
+        
+            }
+        switch(e.getKeyCode()) 
+        {
             case KeyEvent.VK_LEFT: isLeftPressed = true; break;
             case KeyEvent.VK_RIGHT: isRightPressed = true; break;
         }
         if(isLeftPressed && isRightPressed)
         {
-            time = beats.get(0).getX();
-            hit = true;
+             if (beats.get(beatCounter).getColor() != 3)
+            {
+            }
+            else
+            {
+                time = beats.get(0).getX();
+                if (calculatePosition() < 100 && calculatePosition() >= 40)
+                {
+                    beats.get(beatCounter).hit();
+                    ++beatCounter;
+                    
+                }
+                hit = true;
+            }
         }   
+       
     }
     public void keyReleased(KeyEvent e)
     {
-        switch(e.getKeyCode()) {
-            case KeyEvent.VK_UP: isLeftPressed = false; break;
-            case KeyEvent.VK_DOWN: isRightPressed = false; break;
+        switch(e.getKeyCode()) 
+        {
+            case KeyEvent.VK_LEFT: isLeftPressed = false; break;
+            case KeyEvent.VK_RIGHT: isRightPressed = false; break;
         }
     }
     public class DrawPanel extends JPanel
@@ -141,7 +169,7 @@ public class Main extends JFrame implements KeyListener
                     g.setColor(Color.BLACK);
                     g.fillRect(0,0,1024,720);
                     
-                    g.drawImage(ImageIO.read(new File("assets\\target.png")), 10, 600,null); //draws the target
+                    g.drawImage(ImageIO.read(new File("assets\\target.png")), 40, 600,null); //draws the target
                      
                     Font font = new Font("Serif", Font.PLAIN, 96);
                     g.setFont(font);
@@ -158,7 +186,7 @@ public class Main extends JFrame implements KeyListener
                                 g.drawImage(ImageIO.read(new File(beats.get(i).getFile())), beats.get(i).getX(), beats.get(i).getY(),null);
                             }
                         }
-                        if (stringTime < 100)
+                        if (stringTime < 400)
                         {
                             g.drawString(accuracyString, 500, 120);
                             g.drawString(time + "", 200, 120);
