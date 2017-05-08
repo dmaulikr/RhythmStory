@@ -60,6 +60,7 @@ public class Main extends JFrame implements KeyListener
     
     int attackSpriteCounter = 9; //determines which sprite to draw;
     int attackSpriteTimer = 0;
+    int cooldownTimer = 0; //time to wait until character resets;
     public Main()
     {
         setIgnoreRepaint(true);
@@ -105,7 +106,6 @@ public class Main extends JFrame implements KeyListener
                 {
                     beats.get(beatCounter).hit();
                     ++beatCounter;
-                    
                 }
                 hit = true;
             }
@@ -123,7 +123,6 @@ public class Main extends JFrame implements KeyListener
                 {
                     beats.get(beatCounter).hit();
                     ++beatCounter;
-                    
                 }
                 hit = true;
             }
@@ -188,22 +187,30 @@ public class Main extends JFrame implements KeyListener
                     g.drawImage(images.get(3), 0, 178 ,null); //draws top of background
                     g.drawImage(images.get(4), 140, 50,null); //draws the target
                     g.drawImage(images.get(getAccuracy() + 4), 0, 0,null); 
+                    if (hit == true)
                     {
+                        cooldownTimer = cooldownTimer + 10;
                         attackSpriteTimer = attackSpriteTimer + 10;
-                        if (attackSpriteTimer == 150)
+                        if (attackSpriteTimer == 100 && attackSpriteCounter <= 12 && cooldownTimer < 400)
                         {
                             g.drawImage(images.get(12), 0, 303,null); //draws middle of background;
                             g.drawImage(images.get(attackSpriteCounter), 350, 570,null);
                             attackSpriteTimer = 0;
-                            ++attackSpriteCounter;
+                            if (attackSpriteCounter < 12)
+                            {
+                                ++attackSpriteCounter;
+                            }
                         }
-                        if (attackSpriteCounter == 12)
+                        if (cooldownTimer == 400)
                         {
+                            g.drawImage(images.get(12), 0, 303,null);
+                            g.drawImage(images.get(9), 350, 570,null);
+                            cooldownTimer = 0;
+                            attackSpriteTimer = 0;
+                            hit = false;
                             attackSpriteCounter = 9;
                         }
                     }//draws the attack sprite
-                    
-                    
                      
                     
                     
@@ -225,10 +232,11 @@ public class Main extends JFrame implements KeyListener
                         stringTime = 0;
                         ++beatCounter;
                     }
+                    
                     bs.show();
                     Toolkit.getDefaultToolkit().sync();
                     g.dispose();
-                    Thread.sleep(10);
+                    Thread.sleep(15);
                 }
                 catch (Exception e)
                 {
@@ -372,6 +380,7 @@ public class Main extends JFrame implements KeyListener
         {
             g.drawImage(ImageIO.read(new File("assets\\background.jpg")), 0, 178,null);
             g.drawImage(ImageIO.read(new File("assets\\floor.png")), 0, 622,null);
+            g.drawImage(images.get(9), 350, 570,null);
             /*
             Image icon = new ImageIcon(getClass().getResource("assets\\zakum.gif")).ge‌​tImage();
             g.drawImage(icon, 100, 200, this);
