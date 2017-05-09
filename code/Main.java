@@ -17,6 +17,14 @@ import javax.sound.sampled.Clip;
 import java.awt.Image;
 import java.net.URL;
 import javax.swing.ImageIcon;
+/**
+ * Official Maplestory waifu rankings:
+ * 1. Cygnus
+ * 2. Lucid
+ * 3. Orchid
+ * 4. Hilla
+ * 5. Zakum
+ */
 public class Main extends JFrame implements KeyListener
 {
     boolean isLeftPressed, isRightPressed;
@@ -220,11 +228,7 @@ public class Main extends JFrame implements KeyListener
                         {
                             g.drawImage(images.get(beats.get(i).getColor() - 1), beats.get(i).getX(), beats.get(i).getY(),null);
                         }
-                    }
-                    if (stringTime < 400)
-                    {
-                        
-                    }             
+                    }           
                     if (beats.get(beatCounter).getX() <= 0)
                     {
                         beats.get(beatCounter).hit();
