@@ -17,14 +17,6 @@ import javax.sound.sampled.Clip;
 import java.awt.Image;
 import java.net.URL;
 import javax.swing.ImageIcon;
-/**
- * Official Maplestory waifu rankings:
- * 1. Cygnus
- * 2. Lucid
- * 3. Orchid
- * 4. Hilla
- * 5. Zakum
- */
 public class Main extends JFrame implements KeyListener
 {
     boolean isLeftPressed, isRightPressed;
@@ -199,20 +191,29 @@ public class Main extends JFrame implements KeyListener
                     {
                         cooldownTimer = cooldownTimer + 10;
                         attackSpriteTimer = attackSpriteTimer + 10;
-                        if (attackSpriteTimer == 100 && attackSpriteCounter <= 12 && cooldownTimer < 400)
+                        if (attackSpriteTimer == 80 && attackSpriteCounter <= 12 && cooldownTimer < 320)
                         {
                             g.drawImage(images.get(12), 0, 303,null); //draws middle of background;
                             g.drawImage(images.get(attackSpriteCounter), 350, 570,null);
+                            if (attackSpriteCounter >= 10)
+                            {
+                                g.drawImage(images.get(14), 405, 595,null);
+                            }
+                            else
+                            {
+                                g.drawImage(images.get(13), 405, 600,null);
+                            }
                             attackSpriteTimer = 0;
                             if (attackSpriteCounter < 12)
                             {
                                 ++attackSpriteCounter;
                             }
                         }
-                        if (cooldownTimer == 400)
+                        if (cooldownTimer == 320)
                         {
                             g.drawImage(images.get(12), 0, 303,null);
                             g.drawImage(images.get(9), 350, 570,null);
+                            g.drawImage(images.get(13), 405, 600,null);
                             cooldownTimer = 0;
                             attackSpriteTimer = 0;
                             hit = false;
@@ -228,7 +229,11 @@ public class Main extends JFrame implements KeyListener
                         {
                             g.drawImage(images.get(beats.get(i).getColor() - 1), beats.get(i).getX(), beats.get(i).getY(),null);
                         }
-                    }           
+                    }
+                    if (stringTime < 400)
+                    {
+                        
+                    }             
                     if (beats.get(beatCounter).getX() <= 0)
                     {
                         beats.get(beatCounter).hit();
@@ -366,6 +371,8 @@ public class Main extends JFrame implements KeyListener
             images.add(ImageIO.read(new File("assets\\attack2.png"))); //10
             images.add(ImageIO.read(new File("assets\\attack3.png"))); //11
             images.add(ImageIO.read(new File("assets\\backgroundMid.jpg"))); //12
+            images.add(ImageIO.read(new File("assets\\snailStand.png"))); //13
+            images.add(ImageIO.read(new File("assets\\snailHit.png"))); //14
         }
         catch (Exception e)
         {
@@ -385,6 +392,7 @@ public class Main extends JFrame implements KeyListener
             g.drawImage(ImageIO.read(new File("assets\\background.jpg")), 0, 178,null);
             g.drawImage(ImageIO.read(new File("assets\\floor.png")), 0, 622,null);
             g.drawImage(images.get(9), 350, 570,null);
+            g.drawImage(images.get(13), 405, 600,null);
             /*
             Image icon = new ImageIcon(getClass().getResource("assets\\zakum.gif")).ge‌​tImage();
             g.drawImage(icon, 100, 200, this);
