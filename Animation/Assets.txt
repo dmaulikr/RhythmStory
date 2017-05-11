@@ -1,0 +1,44 @@
+//Ghost
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/107933
+//Ratatula
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/118316
+//Targa(Bigger ratatula)
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/103390
+//Manon+
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/107952
+//Griffey+
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/62446
+//Pink+
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/67005
+//Ifrit
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/66845
+//White Golem+
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/62501
+//Dodo
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/66833
+//Mossyshroom
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/66778
+//Golem
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/66729
+//Loveslime
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/66569
+//KingSlime
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/66312
+//Slime+
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/66178
+//Yeti
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/66218
+//Mushroom+
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/62026
+//Lord Balrog+
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/65140
+//Horntail
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/65143
+//Zakum
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/65142
+//Fox
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/63014
+//Mano+
+http://www.maplesimulator.com/bannedstory/version/32/collection-item/62091
+
+snail>slime>mushroom>mano>golem>balrog>griffey>manon>pink
