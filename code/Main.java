@@ -61,6 +61,8 @@ public class Main extends JFrame implements KeyListener
     int attackSpriteCounter = 9; //determines which sprite to draw;
     int attackSpriteTimer = 0;
     int cooldownTimer = 0; //time to wait until character resets;
+    
+    ArrayList<Monster> monsters = new ArrayList<Monster>();
     public Main()
     {
         setIgnoreRepaint(true);
@@ -234,7 +236,7 @@ public class Main extends JFrame implements KeyListener
                     {
                         
                     }             
-                    if (beats.get(beatCounter).getX() <= 0)
+                    if (beats.get(beatCounter).getX() <= 80)
                     {
                         beats.get(beatCounter).hit();
                         accuracyString = "Miss";
@@ -383,7 +385,18 @@ public class Main extends JFrame implements KeyListener
         Main main = new Main();
         main.startNow();
     }
-    
+    public void loadMonsters()
+    {
+        monsters.add(new Monster("snail", 1000));
+        monsters.add(new Monster("slime", 2000));
+        monsters.add(new Monster("mushroom", 3500));
+        monsters.add(new Monster("mano", 6000));
+        monsters.add(new Monster("golem", 10000));
+        monsters.add(new Monster("balrog", 1500));
+        monsters.add(new Monster("griffey", 2500));
+        monsters.add(new Monster("mano", 50000));
+        monsters.add(new Monster("bean", 100000));
+    }
     
     public void loadBackground() //stores an image 
     {
