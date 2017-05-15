@@ -41,6 +41,8 @@ public class Main extends JFrame implements KeyListener
     
     int points; //the player's points
     
+    int multiplier = 1; //point multiplier
+    
     int pressedPosition;
     
     ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
@@ -106,7 +108,8 @@ public class Main extends JFrame implements KeyListener
             else
             {
                 time = beats.get(beatCounter).getX();
-                if (calculatePosition() <= 205 && calculatePosition() >= 125)
+                int position = calculatePosition();
+                if (position <= 205 && position >= 125)
                 {
                     beats.get(beatCounter).hit();
                     ++beatCounter;
@@ -123,7 +126,8 @@ public class Main extends JFrame implements KeyListener
             else
             {
                 time = beats.get(beatCounter).getX();
-                if (calculatePosition() <= 205 && calculatePosition() >= 125)
+                int position = calculatePosition();
+                if (position <= 205 && position >= 125)
                 {
                     beats.get(beatCounter).hit();
                     ++beatCounter;
@@ -146,7 +150,8 @@ public class Main extends JFrame implements KeyListener
             else
             {
                 time = beats.get(0).getX();
-                if (calculatePosition() <= 205 && calculatePosition() >= 125)
+                int position = calculatePosition();
+                if (position <= 205 && position >= 125)
                 {
                     beats.get(beatCounter).hit();
                     ++beatCounter;
@@ -243,6 +248,7 @@ public class Main extends JFrame implements KeyListener
                         beats.get(beatCounter).hit();
                         accuracyString = "Miss";
                         stringTime = 0;
+                        multiplier=1;
                         ++beatCounter;
                     }
                     if(beatCounter>=1)
@@ -250,14 +256,18 @@ public class Main extends JFrame implements KeyListener
                         String acc = "" + getPlayerAccuracy();
                         g.drawString(acc,100,300);
                     }
-                    String a = ""+perfect/2;
-                    String b = ""+good/2;
-                    String c = ""+bad/2;
+                    String a = ""+perfect;
+                    String b = ""+good;
+                    String c = ""+bad;
                     String d = ""+beatCounter;
+                    String e = ""+points;
+                    String f = ""+multiplier;
                     g.drawString(a,100,400);
                     g.drawString(b,100,550);
                     g.drawString(c,100,650);
                     g.drawString(d,300,650);
+                    g.drawString(e,300,450);
+                    g.drawString(f,300,350);
 
                     bs.show();
                     Toolkit.getDefaultToolkit().sync();
@@ -319,26 +329,28 @@ public class Main extends JFrame implements KeyListener
     public int calculatePosition() //all the calculations when a button is pressed
     {
         int position = beats.get(beatCounter).getX();
+        multiplier++;
         if (position <= 145 && position >= 135)
         {
             perfect++;
             accuracyString = "Perfect";
-            points = points + 300;
+            points = points + (300*multiplier);
         }
         else if ((position > 145 && position <= 155) || (position >= 130 && position < 135))
         {
             good++;
             accuracyString = "Good";
-            points = points + 100;
+            points = points + (100*multiplier);
         }
         else if ((position < 130 && position >= 125) || (position > 155 && position <= 205))
         {
             bad++;
-            points = points + 50;
+            points = points + (50*multiplier);
             accuracyString = "Bad";
         }
         else
         {
+            multiplier=1;
             accuracyString = "Miss";
         }
         return position;
@@ -362,7 +374,7 @@ public class Main extends JFrame implements KeyListener
     public double getPlayerAccuracy()
     {
         double total=beatCounter;
-        accuracy=(((bad/2)*50)+((good/2)*100)+((perfect/2)*300))/(total*300);
+        accuracy=((bad*50)+(good*100)+(perfect*300))/(total*300);
         return accuracy;
     }
     public void playMusic()
