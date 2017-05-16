@@ -2,12 +2,13 @@ public class Beat
 {
     int x;
     int y;
-    boolean red;
-    public Beat(boolean color)
+    int color; //1 = red 2 = blue 3 = both
+    boolean hit = false;
+    public Beat(int c)
     {
-        x = 1024;
-        y = 500;
-        red = color;
+        x = 900;
+        y = 55;
+        color = c;
     }
     public int getX()
     {
@@ -17,12 +18,35 @@ public class Beat
     {
         return y;
     }
-    public boolean getColor()
+    public int getColor()
     {
-        return red;
+        return color;
     }
     public void move()
     {
-        x = x - 30;
+        x = x - 5;
+    }
+    public void hit()
+    {
+        hit = true;
+    }
+    public boolean getHit()
+    {
+        return hit;
+    }
+    public String getFile()
+    {
+        if (color == 1)
+        {
+            return "assets\\beatRed.png";
+        }
+        else if (color == 2)
+        {
+            return "assets\\beatBlue.png";
+        }
+        else
+        {
+            return "assets\\beatBoth.png";
+        }
     }
 }

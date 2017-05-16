@@ -30,6 +30,8 @@ public class Main extends JFrame implements KeyListener
     double accuracy = 0; //the player's accuracy
     
     int time = 0; //how much time has passed
+    
+    Monster currentMonster;
    
     BufferStrategy bs;
     
@@ -45,10 +47,10 @@ public class Main extends JFrame implements KeyListener
     
     int pressedPosition;
     
+    ArrayList<Monster> monsters = new ArrayList<Monster>();
     ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
     ArrayList<Beat> beats = new ArrayList<Beat>(); //arraylist to store all of the beats created
     int[] intervals = new int[1000]; //array to store all the pregenerated intervals
-    
     int beatTime = 0;
     
     int interval = 0;
@@ -70,6 +72,8 @@ public class Main extends JFrame implements KeyListener
     int cooldownTimer = 0; //time to wait until character resets;
     public Main()
     {
+        loadMonsters();
+        currentMonster=monsters.get(0);
         setIgnoreRepaint(true);
         setTitle("RhythmStory");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -86,9 +90,30 @@ public class Main extends JFrame implements KeyListener
         g = (Graphics2D)bs.getDrawGraphics();
         beats.add(new Beat(1));
     }
+    public void loadMonsters()
+    {
+        Monster snail= new Monster("Snail",10000);
+        Monster slime= new Monster("Slime",20000);
+        Monster mushroom= new Monster("Mushroom",30000);
+        Monster mano= new Monster("Mano",40000);
+        Monster golem= new Monster("Golem",50000);
+        Monster balrog= new Monster("Balrog",60000);
+        Monster griffey= new Monster("Griffey",70000);
+        Monster manon= new Monster("Manon",80000);
+        Monster pink= new Monster("Pink",90000);
+        monsters.add(snail);
+        monsters.add(slime);
+        monsters.add(mushroom);
+        monsters.add(mano);
+        monsters.add(golem);
+        monsters.add(balrog);
+        monsters.add(griffey);
+        monsters.add(manon);
+        monsters.add(pink);
+    }
     public void startNow()
     {
-        //playMusic();
+        //playMusic(); 
         loadBackground();
         panel.drawStuff();
     }
@@ -107,6 +132,7 @@ public class Main extends JFrame implements KeyListener
             }
             else
             {
+                currentMonster.takeDamage(getPlayerDamage());
                 time = beats.get(beatCounter).getX();
                 int position = calculatePosition();
                 if (position <= 205 && position >= 125)
@@ -125,6 +151,7 @@ public class Main extends JFrame implements KeyListener
             }
             else
             {
+                currentMonster.takeDamage(getPlayerDamage());
                 time = beats.get(beatCounter).getX();
                 int position = calculatePosition();
                 if (position <= 205 && position >= 125)
@@ -149,6 +176,7 @@ public class Main extends JFrame implements KeyListener
             }
             else
             {
+                currentMonster.takeDamage(getPlayerDamage());
                 time = beats.get(0).getX();
                 int position = calculatePosition();
                 if (position <= 205 && position >= 125)
@@ -160,7 +188,6 @@ public class Main extends JFrame implements KeyListener
                 hit = true;
             }
         }   
-       
     }
     public void keyReleased(KeyEvent e)
     {
@@ -262,13 +289,15 @@ public class Main extends JFrame implements KeyListener
                     String d = ""+beatCounter;
                     String e = ""+points;
                     String f = ""+multiplier;
+                    String dmg =""+getPlayerDamage();
+                
                     g.drawString(a,100,400);
                     g.drawString(b,100,550);
                     g.drawString(c,100,650);
                     g.drawString(d,300,650);
                     g.drawString(e,300,450);
                     g.drawString(f,300,350);
-
+                    g.drawString(dmg,300,550);
                     bs.show();
                     Toolkit.getDefaultToolkit().sync();
                     g.dispose();
@@ -354,6 +383,18 @@ public class Main extends JFrame implements KeyListener
             accuracyString = "Miss";
         }
         return position;
+    }
+    public double getPlayerDamage()
+    {
+        int x = 1;
+        if(getAccuracy()==1)
+        x=100;
+        if(getAccuracy()==2)
+        x=50;
+        if(getAccuracy()==3)
+        x=20;
+        double damage = x + ((multiplier/100)*x);
+        return damage;
     }
     public int getAccuracy() //returns the accuray of the note
     {
