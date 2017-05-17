@@ -29,8 +29,6 @@ public class Main extends JFrame implements KeyListener
     int good = 0; //number of 100's
     double accuracy = 0; //the player's accuracy
     
-    int track1 = 1; //used for storeimages2 (keeps track of the monster string)
-    int track2 = 1; //used for storeimages2 (keeps track of the folder1 string and the prefix (type) of the monster)
     int time = 0; //how much time has passed
     
     Monster currentMonster;
@@ -43,6 +41,9 @@ public class Main extends JFrame implements KeyListener
     
     String accuracyString = ""; //bad/good/perfect
     
+    int track1 = 1; //monster
+    int track2 = 1; // type
+    int currentState = 0;
     int points; //the player's points
     
     int multiplier = 1; //point multiplier
@@ -293,7 +294,7 @@ public class Main extends JFrame implements KeyListener
                     String e = ""+points;
                     String f = ""+multiplier;
                     String dmg =""+getPlayerDamage();
-                    String h = ""+images.size();
+                    String h =""+images.size();
                 
                     g.drawString(a,100,400);
                     g.drawString(b,100,550);
@@ -302,7 +303,7 @@ public class Main extends JFrame implements KeyListener
                     g.drawString(e,300,450);
                     g.drawString(f,300,350);
                     g.drawString(dmg,300,550);
-                    g.drawString(h,300,750);
+                    g.drawString(h,300,600);
                     bs.show();
                     Toolkit.getDefaultToolkit().sync();
                     g.dispose();
@@ -389,6 +390,11 @@ public class Main extends JFrame implements KeyListener
         }
         return position;
     }
+    public int getState()
+    public int getIndex(String name)
+    {
+        for(int i = 0; i < images.size();
+    }
     public double getPlayerDamage()
     {
         int x = 1;
@@ -462,29 +468,11 @@ public class Main extends JFrame implements KeyListener
         {
         }
     }
-    /*
-     * track1 = 1 = Snail
-     * track1 = 2 = Slime
-     * track1 = 3 = Mushroom
-     * track1 = 4 = Mano
-     * track1 = 5 = Golem
-     * track1 = 6 = Balrog
-     * track1 = 7 = Griffey
-     * track1 = 8 = Manon
-     * track1 = 9 = Pink
-     * 
-     * track2 = 1 = Standing
-     * track2 = 2 = Death
-     * track2 = 3 = Damaged
-     * track2 = 4 = Attack
-     */
-   
-   
-        public void storeImages2(int track1, int track2,String type,String monster)
+    public void storeImages2(int track1, int track2, String type, String monster)
     {
         try
         {
-            String path = "assets\\Animations\\" + type + "\\" + type + monster;
+            String path = "assets\\Animation\\" + type + "\\" + type + monster;
             int i = 1;
             while(i>0)
             {
@@ -493,42 +481,42 @@ public class Main extends JFrame implements KeyListener
                 i++;
             }
         }
-        catch (Exception e)
+        catch(Exception e)
         {
             track1++;
-            String a = "";//monster
-            String b = "";//type
-            if(track1 ==1)
-            a = "Snail";
-            if(track1 ==2)
-            a = "Slime";
-            if(track1 ==3)
-            a = "Mushroom";
-            if(track1 ==4)
-            a = "Mano";
-            if(track1 ==5)
-            a = "Golem";
-            if(track1 ==6)
-            a = "Balrog";
-            if(track1 ==7)
-            a = "Griffey";
-            if(track1 ==8)
-            a = "Manon";
-            if(track1 ==9)
-            a = "Pink";
+            String a = "";
+            String b = "";
+            if(track1==1)
+            a="Snail";
+            if(track1==2)
+            a="Slime";
+            if(track1==3)
+            a="Mushroom";  
+            if(track1==4)
+            a="Mano";
+            if(track1==5)
+            a="Golem";
+            if(track1==6)
+            a="Balrog";
+            if(track1==7)
+            a="Griffey";
+            if(track1==8)
+            a="Manon";
+            if(track1==9)
+            a="Pink";
             if(track1==10)
             {
                 track2++;
                 track1=1;
             }
             if(track2==1)
-            b = "Standing";
+            b="Standing";
             if(track2==2)
-            b = "Death";
+            b="Death";
             if(track2==3)
-            b = "Damaged";
+            b="Damaged";
             if(track2==4)
-            b = "Attack";
+            b="Attack";
             if(track2!=5)
             storeImages2(track1,track2,b,a);
         }
