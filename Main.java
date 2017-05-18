@@ -1,4 +1,4 @@
-import java.awt.Color;
+    import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -45,7 +45,8 @@ public class Main extends JFrame implements KeyListener
     int track2 = 1; // type
     int currentState = 0;
     int points; //the player's points
-    
+    int index=0; //stringarray tracker
+    String[] fileNames;
     int multiplier = 1; //point multiplier
     
     int pressedPosition;
@@ -90,7 +91,8 @@ public class Main extends JFrame implements KeyListener
         addKeyListener(this);
         generateBeats();
         storeImages();
-        storeImages2(track1,track2,"Standing","Snail");
+        storeImages2("Standing","Snail");
+        fileNames = new String[images.size()];
         g = (Graphics2D)bs.getDrawGraphics();
         beats.add(new Beat(1));
     }
@@ -205,6 +207,7 @@ public class Main extends JFrame implements KeyListener
     {
         public void drawStuff()
         {
+            int k = 0;
             while(true)
             {
                 try
@@ -287,22 +290,9 @@ public class Main extends JFrame implements KeyListener
                         String acc = "" + getPlayerAccuracy();
                         g.drawString(acc,100,300);
                     }
-                    String a = ""+perfect;
-                    String b = ""+good;
-                    String c = ""+bad;
-                    String d = ""+beatCounter;
-                    String e = ""+points;
-                    String f = ""+multiplier;
-                    String dmg =""+getPlayerDamage();
-                    String h =""+images.size();
-                
-                    g.drawString(a,100,400);
-                    g.drawString(b,100,550);
-                    g.drawString(c,100,650);
-                    g.drawString(d,300,650);
-                    g.drawString(e,300,450);
-                    g.drawString(f,300,350);
-                    g.drawString(dmg,300,550);
+                    k++;
+                    String h =""+ fileNames[k];
+
                     g.drawString(h,300,600);
                     bs.show();
                     Toolkit.getDefaultToolkit().sync();
@@ -390,11 +380,6 @@ public class Main extends JFrame implements KeyListener
         }
         return position;
     }
-    public int getState()
-    public int getIndex(String name)
-    {
-        for(int i = 0; i < images.size();
-    }
     public double getPlayerDamage()
     {
         int x = 1;
@@ -444,6 +429,11 @@ public class Main extends JFrame implements KeyListener
             ex.printStackTrace();
         }
     }
+    public void resetTrack()
+    {
+        track1=1;
+        track2=1;
+    }
     public void storeImages()
     {
         try
@@ -468,7 +458,7 @@ public class Main extends JFrame implements KeyListener
         {
         }
     }
-    public void storeImages2(int track1, int track2, String type, String monster)
+    public void storeImages2(String type, String monster)
     {
         try
         {
@@ -477,7 +467,10 @@ public class Main extends JFrame implements KeyListener
             while(i>0)
             {
                 String a = "" + i;
+                String name = "";
                 images.add(ImageIO.read(new File(path + a + ".png")));
+                name = path + a + ".png";
+                fileNames[index] = name;
                 i++;
             }
         }
@@ -518,7 +511,7 @@ public class Main extends JFrame implements KeyListener
             if(track2==4)
             b="Attack";
             if(track2!=5)
-            storeImages2(track1,track2,b,a);
+            storeImages2(b,a);
         }
     }
     public static void main(String[] args)
