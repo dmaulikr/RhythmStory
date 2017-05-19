@@ -2,10 +2,12 @@ public class Monster
 {
     String name;
     double health;
+    double maxHealth;
     public Monster(String n, int h)
     {
         name = n;
         health = h;
+        maxHealth = h;
     }
     public void takeDamage(double damage)
     {
@@ -18,5 +20,9 @@ public class Monster
     public double getHealth()
     {
         return health;
+    }
+    public double getMaxHealth()
+    {
+        return maxHealth;
     }
 }

@@ -65,7 +65,7 @@ public class Main extends JFrame implements KeyListener
     
     BufferedImage image; //stores the image
     
-    int health; //the player's health
+    int health = 300; //the player's health
     
     int beatCounter = 0;
     
@@ -80,6 +80,8 @@ public class Main extends JFrame implements KeyListener
     ArrayList<BufferedImage> monsterHit = new ArrayList<BufferedImage>();
     
     int monsterCounter = 0;
+    
+    int combo = 0;
     
     boolean battle = true;
     public Main()
@@ -107,15 +109,15 @@ public class Main extends JFrame implements KeyListener
     }
     public void loadMonsters()
     {
-        Monster snail= new Monster("Snail",1000);
-        Monster slime= new Monster("Slime",2000);
-        Monster mushroom= new Monster("Mushroom",5000);
-        Monster mano= new Monster("Mano",10000);
-        Monster golem= new Monster("Golem",25000);
-        Monster yeti = new Monster("Yeti",50000);
-        Monster griffey= new Monster("Griffey",100000);
-        Monster manon= new Monster("Manon",100000);
-        Monster pink= new Monster("Pink",250000);
+        Monster snail= new Monster("Snail",100);
+        Monster slime= new Monster("Slime",250);
+        Monster mushroom= new Monster("Mushroom",400);
+        Monster mano= new Monster("Mano", 600);
+        Monster golem= new Monster("Golem",900);
+        Monster yeti = new Monster("Yeti", 1300);
+        Monster griffey= new Monster("Griffey",1800);
+        Monster manon= new Monster("Manon",2500);
+        Monster pink= new Monster("Pink",5000);
         monsters.add(snail);
         monsters.add(slime);
         monsters.add(mushroom);
@@ -144,10 +146,17 @@ public class Main extends JFrame implements KeyListener
             if (beats.get(beatCounter).getColor() != 1 || isRightPressed == true)
             {
                 accuracyString = "Miss";
+                combo = 0;
+                health = health - 10;
             }
             else
             {
-                currentMonster.takeDamage(getPlayerDamage());
+                ++combo;
+                if (combo % 20 == 0 && combo != 0)
+                {
+                    health = health + 20;
+                }
+                monsters.get(monsterCounter).takeDamage(getPlayerDamage());
                 time = beats.get(beatCounter).getX();
                 int position = calculatePosition();
                 if (position <= 205 && position >= 125)
@@ -163,9 +172,16 @@ public class Main extends JFrame implements KeyListener
             if (beats.get(beatCounter).getColor() != 2 || isLeftPressed == true)
             {
                 accuracyString = "Miss";
+                combo = 0;
+                health = health - 10;
             }
             else
             {
+                ++combo;
+                if (combo % 20 == 0 && combo != 0)
+                {
+                    health = health + 20;
+                }
                 currentMonster.takeDamage(getPlayerDamage());
                 time = beats.get(beatCounter).getX();
                 int position = calculatePosition();
@@ -187,10 +203,18 @@ public class Main extends JFrame implements KeyListener
         {
              if (beats.get(beatCounter).getColor() != 3)
             {
+                combo = 0;
                 accuracyString = "Miss";
+                health = health - 10;
             }
             else
             {
+                ++combo;
+                if (combo % 20 == 0 && combo != 0)
+                {
+                    health = health + 20;
+                }
+                health = health + 20;
                 currentMonster.takeDamage(getPlayerDamage());
                 time = beats.get(0).getX();
                 int position = calculatePosition();
@@ -216,7 +240,7 @@ public class Main extends JFrame implements KeyListener
     {
         public void drawStuff()
         {
-            while(true)
+            while(battle)
             {
                 try
                 {
@@ -238,6 +262,11 @@ public class Main extends JFrame implements KeyListener
                     g.drawImage(images.get(3), 0, 178 ,null); //draws top of background
                     g.drawImage(images.get(4), 140, 50,null); //draws the target
                     g.drawImage(images.get(getAccuracy() + 4), 0, 0,null); 
+                    
+                    g.setColor(Color.GREEN);
+                    g.fillRect(10, 150, health, 25);
+                    g.setColor(Color.RED);
+                    g.fillRect(550, 150, (int)((monsters.get(monsterCounter).getHealth()*300)/monsters.get(monsterCounter).getMaxHealth()), 25);
                     if (hit == true)
                     {
                         cooldownTimer = cooldownTimer + 10;
@@ -298,6 +327,7 @@ public class Main extends JFrame implements KeyListener
                     {
                         beats.get(beatCounter).hit();
                         accuracyString = "Miss";
+                        health = health - 10;
                         stringTime = 0;
                         multiplier=1;
                         ++beatCounter;
@@ -308,7 +338,7 @@ public class Main extends JFrame implements KeyListener
                     while (p > 0)
                     {
                         int digit = p%10;
-                        g.drawImage(numbers.get(digit), 200 - (counter * 20), 150,null);
+                        g.drawImage(numbers.get(digit), 500 - (counter * 20), 150,null);
                         p = p / 10;
                         ++counter;
                     }
@@ -321,7 +351,18 @@ public class Main extends JFrame implements KeyListener
                         a = a / 10;
                         ++counter;
                     }
-                    
+                    if (checkDead() == true)
+                    {
+                        ++monsterCounter;
+                    }
+                    if (health < 0)
+                    {
+                        battle = false;
+                        g.setColor(Color.BLACK);
+                        g.fillRect(0,0,900,720);
+                        g.setColor(Color.RED);
+                        g.drawString("GAME OVER", 130, 360);
+                    }
                     bs.show();
                     Toolkit.getDefaultToolkit().sync();
                     g.dispose();
