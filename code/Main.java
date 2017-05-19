@@ -472,7 +472,7 @@ public class Main extends JFrame implements KeyListener
         x=50;
         if(getAccuracy()==3)
         x=20;
-        double damage = 10000 + x + (((double)multiplier/100)*x);
+        double damage = x + (((double)multiplier/100)*x);
         return damage;
     }
     public int getAccuracy() //returns the accuray of the note
