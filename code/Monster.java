@@ -1,14 +1,18 @@
 public class Monster
 {
     String name;
-    int health;
+    double health;
     public Monster(String n, int h)
     {
         name = n;
         health = h;
     }
-    public void takeDamage(int damage)
+    public void takeDamage(double damage)
     {
         health = health - damage;
+    }
+    public String getName()
+    {
+        return name;
     }
 }
