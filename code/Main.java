@@ -80,6 +80,8 @@ public class Main extends JFrame implements KeyListener
     ArrayList<BufferedImage> monsterHit = new ArrayList<BufferedImage>();
     
     int monsterCounter = 0;
+    
+    boolean battle = true;
     public Main()
     {
         loadMonsters();
@@ -574,6 +576,14 @@ public class Main extends JFrame implements KeyListener
         {
             System.out.println("ha");
         }
+    }
+    public boolean checkDead()
+    {
+        if (monsters.get(monsterCounter).getHealth() <= 0)
+        {
+            return true;
+        }
+        return false;
     }
     public static void main(String[] args)
     {

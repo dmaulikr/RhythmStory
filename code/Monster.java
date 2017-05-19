@@ -15,4 +15,8 @@ public class Monster
     {
         return name;
     }
+    public double getHealth()
+    {
+        return health;
+    }
 }
