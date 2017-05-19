@@ -53,6 +53,7 @@ public class Main extends JFrame implements KeyListener
     ArrayList<Monster> monsters = new ArrayList<Monster>();
     ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
     ArrayList<BufferedImage> numbers = new ArrayList<BufferedImage>();
+    ArrayList<BufferedImage> etc = new ArrayList<BufferedImage>();
     ArrayList<Beat> beats = new ArrayList<Beat>(); //arraylist to store all of the beats created
     int[] intervals = new int[1000]; //array to store all the pregenerated intervals
     int beatTime = 0;
@@ -105,6 +106,7 @@ public class Main extends JFrame implements KeyListener
         g = (Graphics2D)bs.getDrawGraphics();
         beats.add(new Beat(1));
         storeNumbers();
+        storeEtc();
         storeStandHit();
     }
     public void loadMonsters()
@@ -264,9 +266,9 @@ public class Main extends JFrame implements KeyListener
                     g.drawImage(images.get(getAccuracy() + 4), 0, 0,null); 
                     
                     g.setColor(Color.GREEN);
-                    g.fillRect(10, 150, health, 25);
+                    g.fillRect(0, 170, (int)(health*1.4), 10);
                     g.setColor(Color.RED);
-                    g.fillRect(550, 150, (int)((monsters.get(monsterCounter).getHealth()*300)/monsters.get(monsterCounter).getMaxHealth()), 25);
+                    g.fillRect(600, 170, (int)((monsters.get(monsterCounter).getHealth()*300)/monsters.get(monsterCounter).getMaxHealth()), 10);
                     if (hit == true)
                     {
                         cooldownTimer = cooldownTimer + 10;
@@ -296,7 +298,7 @@ public class Main extends JFrame implements KeyListener
                         while (d > 0)
                         {
                             int digit = d % 10;
-                            g.drawImage(numbers.get(digit + 10), 450 - (counter * 20), damageHeight,null);
+                            g.drawImage(numbers.get(digit + 30), 450 - (counter * 20), damageHeight,null);
                             d = d /10;
                             ++counter;
                                 }
@@ -311,11 +313,7 @@ public class Main extends JFrame implements KeyListener
                             hit = false;
                             attackSpriteCounter = 9;
                         }
-                        
                     }//draws the attack sprite
-                     
-                    
-                    
                     for (int i = beatCounter; i < beats.size(); i++) //draws each beat in the beat list
                     {
                         if (beats.get(i).getHit() == false)
@@ -332,14 +330,22 @@ public class Main extends JFrame implements KeyListener
                         multiplier=1;
                         ++beatCounter;
                     }
-                    
                     int p = points;
                     int counter = 0;
                     while (p > 0)
                     {
                         int digit = p%10;
-                        g.drawImage(numbers.get(digit), 500 - (counter * 20), 150,null);
+                        g.drawImage(numbers.get(digit), 850 - (counter * 20), 180,null);
                         p = p / 10;
+                        ++counter;
+                    }
+                    int b = multiplier;
+                    counter = 0;
+                    while (b > 0)
+                    {
+                        int digit = b % 10;
+                        g.drawImage(numbers.get(digit+20), 85 - (counter * 20), 190,null);
+                        b = b / 10;
                         ++counter;
                     }
                     int a = (int)(getPlayerAccuracy() * 100);
@@ -347,20 +353,28 @@ public class Main extends JFrame implements KeyListener
                     while (a > 0)
                     {
                         int digit = a % 10;
-                        g.drawImage(numbers.get(digit), 85 - (counter * 20), 50,null);
+                        g.drawImage(numbers.get(digit+10), 800 - (counter * 35), 240,null);
                         a = a / 10;
                         ++counter;
                     }
+                    g.drawImage(etc.get(1), 840, 245,null);
+                    g.drawImage(etc.get(2), 120, 190,null);
                     if (checkDead() == true)
                     {
                         ++monsterCounter;
                     }
+                    if(monsterCounter>9)
+                    {
+                        battle = false;
+                        g.drawImage(etc.get(3), 0, 0,null);
+                        g.setColor(Color.BLACK);
+                        g.drawString("VICTORY", 130, 360);
+                    }
                     if (health < 0)
                     {
                         battle = false;
+                        g.drawImage(etc.get(3), 0, 0,null);
                         g.setColor(Color.BLACK);
-                        g.fillRect(0,0,900,720);
-                        g.setColor(Color.RED);
                         g.drawString("GAME OVER", 130, 360);
                     }
                     bs.show();
@@ -458,7 +472,7 @@ public class Main extends JFrame implements KeyListener
         x=50;
         if(getAccuracy()==3)
         x=20;
-        double damage = x + (((double)multiplier/100)*x);
+        double damage = 10000 + x + (((double)multiplier/100)*x);
         return damage;
     }
     public int getAccuracy() //returns the accuray of the note
@@ -598,17 +612,25 @@ public class Main extends JFrame implements KeyListener
     {
         try
         {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 10; j++)
                 {
                     if (i == 0)
                     {
-                        numbers.add(ImageIO.read(new File("Numbers\\Damage" + j + ".png")));
+                        numbers.add(ImageIO.read(new File("BetterNumbers\\Score" + j + ".png")));
+                    }
+                    else if(i == 1)
+                    {
+                        numbers.add(ImageIO.read(new File("BetterNumbers\\Accuracy" + j + ".png")));
+                    }
+                    else if(i == 2)
+                    {
+                        numbers.add(ImageIO.read(new File("BetterNumbers\\Multiplier" + j + ".png")));
                     }
                     else
                     {
-                        numbers.add(ImageIO.read(new File("Numbers\\CritDamage" + j + ".png")));
+                        numbers.add(ImageIO.read(new File("BetterNumbers\\CritDamage" + j + ".png")));
                     }
                 }
             }
@@ -616,6 +638,28 @@ public class Main extends JFrame implements KeyListener
         catch (Exception e)
         {
             System.out.println("ha");
+        }
+    }
+    public void storeEtc()
+    {
+        try
+        {
+                etc.add(ImageIO.read(new File("BetterNumbers\\DecimalPoint.png")));
+                etc.add(ImageIO.read(new File("BetterNumbers\\Percent.png")));
+                etc.add(ImageIO.read(new File("BetterNumbers\\Combo.png")));
+                etc.add(ImageIO.read(new File("ETC\\Defeat.png")));
+                etc.add(ImageIO.read(new File("ETC\\Victory.png")));
+                etc.add(ImageIO.read(new File("ETC\\Failed1.png")));//5
+                etc.add(ImageIO.read(new File("ETC\\Failed2.png")));
+                etc.add(ImageIO.read(new File("ETC\\Failed3.png")));
+                etc.add(ImageIO.read(new File("ETC\\Failed4.png")));
+                etc.add(ImageIO.read(new File("ETC\\Failed5.png")));
+                etc.add(ImageIO.read(new File("ETC\\Failed6.png")));
+                etc.add(ImageIO.read(new File("ETC\\Failed7.png")));
+                etc.add(ImageIO.read(new File("ETC\\Failed8.png")));
+        }
+        catch(Exception e)
+        {
         }
     }
     public boolean checkDead()
