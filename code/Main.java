@@ -182,7 +182,7 @@ public class Main extends JFrame implements KeyListener
                 {
                     health = health + 20;
                 }
-                currentMonster.takeDamage(getPlayerDamage());
+                monsters.get(monsterCounter).takeDamage(getPlayerDamage());
                 time = beats.get(beatCounter).getX();
                 int position = calculatePosition();
                 if (position <= 205 && position >= 125)
@@ -215,7 +215,7 @@ public class Main extends JFrame implements KeyListener
                     health = health + 20;
                 }
                 health = health + 20;
-                currentMonster.takeDamage(getPlayerDamage());
+                monsters.get(monsterCounter).takeDamage(getPlayerDamage());
                 time = beats.get(0).getX();
                 int position = calculatePosition();
                 if (position <= 205 && position >= 125)
