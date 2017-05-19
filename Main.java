@@ -1,4 +1,4 @@
-    import java.awt.Color;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -45,14 +45,15 @@ public class Main extends JFrame implements KeyListener
     int track2 = 1; // type
     int currentState = 0;
     int points; //the player's points
-    int index=0; //stringarray tracker
-    String[] fileNames;
+    
     int multiplier = 1; //point multiplier
     
     int pressedPosition;
     
     ArrayList<Monster> monsters = new ArrayList<Monster>();
     ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
+    ArrayList<BufferedImage> numbers = new ArrayList<BufferedImage>();
+    ArrayList<BufferedImage> etc = new ArrayList<BufferedImage>();
     ArrayList<Beat> beats = new ArrayList<Beat>(); //arraylist to store all of the beats created
     int[] intervals = new int[1000]; //array to store all the pregenerated intervals
     int beatTime = 0;
@@ -74,6 +75,14 @@ public class Main extends JFrame implements KeyListener
     int attackSpriteCounter = 9; //determines which sprite to draw;
     int attackSpriteTimer = 0;
     int cooldownTimer = 0; //time to wait until character resets;
+    int damageHeight = 500;
+    
+    ArrayList<BufferedImage> monsterStand = new ArrayList<BufferedImage>();
+    ArrayList<BufferedImage> monsterHit = new ArrayList<BufferedImage>();
+    
+    int monsterCounter = 0;
+    
+    boolean battle = true;
     public Main()
     {
         loadMonsters();
@@ -91,28 +100,30 @@ public class Main extends JFrame implements KeyListener
         addKeyListener(this);
         generateBeats();
         storeImages();
-        storeImages2("Standing","Snail");
-        fileNames = new String[images.size()];
+        storeEtc();
+        //storeImages2(track1,track2,"Standing","Snail");
         g = (Graphics2D)bs.getDrawGraphics();
         beats.add(new Beat(1));
+        storeNumbers();
+        storeStandHit();
     }
     public void loadMonsters()
     {
-        Monster snail= new Monster("Snail",10000);
-        Monster slime= new Monster("Slime",20000);
-        Monster mushroom= new Monster("Mushroom",30000);
-        Monster mano= new Monster("Mano",40000);
-        Monster golem= new Monster("Golem",50000);
-        Monster balrog= new Monster("Balrog",60000);
-        Monster griffey= new Monster("Griffey",70000);
-        Monster manon= new Monster("Manon",80000);
-        Monster pink= new Monster("Pink",90000);
+        Monster snail= new Monster("Snail",1000);
+        Monster slime= new Monster("Slime",2000);
+        Monster mushroom= new Monster("Mushroom",5000);
+        Monster mano= new Monster("Mano",10000);
+        Monster golem= new Monster("Golem",25000);
+        Monster yeti = new Monster("Yeti",50000);
+        Monster griffey= new Monster("Griffey",100000);
+        Monster manon= new Monster("Manon",100000);
+        Monster pink= new Monster("Pink",250000);
         monsters.add(snail);
         monsters.add(slime);
         monsters.add(mushroom);
         monsters.add(mano);
         monsters.add(golem);
-        monsters.add(balrog);
+        monsters.add(yeti);
         monsters.add(griffey);
         monsters.add(manon);
         monsters.add(pink);
@@ -207,7 +218,6 @@ public class Main extends JFrame implements KeyListener
     {
         public void drawStuff()
         {
-            int k = 0;
             while(true)
             {
                 try
@@ -240,11 +250,13 @@ public class Main extends JFrame implements KeyListener
                             g.drawImage(images.get(attackSpriteCounter), 350, 570,null);
                             if (attackSpriteCounter >= 10)
                             {
-                                g.drawImage(images.get(14), 405, 595,null);
+                                g.drawImage(monsterHit.get(monsterCounter), 405, 360,null);
+                             
+                                damageHeight = damageHeight - 20;
                             }
                             else
                             {
-                                g.drawImage(images.get(13), 405, 600,null);
+                                g.drawImage(monsterStand.get(monsterCounter), 405, 360,null);
                             }
                             attackSpriteTimer = 0;
                             if (attackSpriteCounter < 12)
@@ -252,16 +264,27 @@ public class Main extends JFrame implements KeyListener
                                 ++attackSpriteCounter;
                             }
                         }
+                        int d = (int)getPlayerDamage();
+                        int counter = 0;
+                        while (d > 0)
+                        {
+                            int digit = d % 10;
+                            g.drawImage(numbers.get(digit + 30), 450 - (counter * 20), damageHeight,null);
+                            d = d /10;
+                            ++counter;
+                                }
                         if (cooldownTimer == 320)
                         {
                             g.drawImage(images.get(12), 0, 303,null);
-                            g.drawImage(images.get(9), 350, 570,null);
-                            g.drawImage(images.get(13), 405, 600,null);
+                            g.drawImage(images.get(15), 350, 570,null);
+                            g.drawImage(monsterStand.get(monsterCounter), 405, 360,null);
                             cooldownTimer = 0;
+                            damageHeight = 500;
                             attackSpriteTimer = 0;
                             hit = false;
                             attackSpriteCounter = 9;
                         }
+                        
                     }//draws the attack sprite
                      
                     
@@ -272,10 +295,6 @@ public class Main extends JFrame implements KeyListener
                         {
                             g.drawImage(images.get(beats.get(i).getColor() - 1), beats.get(i).getX(), beats.get(i).getY(),null);
                         }
-                    }
-                    if (stringTime < 400)
-                    {
-                        
                     }             
                     if (beats.get(beatCounter).getX() <= 0)
                     {
@@ -285,15 +304,36 @@ public class Main extends JFrame implements KeyListener
                         multiplier=1;
                         ++beatCounter;
                     }
-                    if(beatCounter>=1)
+                    
+                    int p = points;
+                    int counter = 0;
+                    while (p > 0)
                     {
-                        String acc = "" + getPlayerAccuracy();
-                        g.drawString(acc,100,300);
+                        int digit = p%10;
+                        g.drawImage(numbers.get(digit), 850 - (counter * 20), 180,null);
+                        p = p / 10;
+                        ++counter;
                     }
-                    k++;
-                    String h =""+ fileNames[k];
-
-                    g.drawString(h,300,600);
+                    int b = multiplier;
+                    counter = 0;
+                    while (b > 0)
+                    {
+                        int digit = b % 10;
+                        g.drawImage(numbers.get(digit+20), 85 - (counter * 20), 190,null);
+                        b = b / 10;
+                        ++counter;
+                    }
+                    int a = (int)(getPlayerAccuracy() * 100);
+                    counter = 0;
+                    while (a > 0)
+                    {
+                        int digit = a % 10;
+                        g.drawImage(numbers.get(digit+10), 800 - (counter * 35), 240,null);
+                        a = a / 10;
+                        ++counter;
+                    }
+                    g.drawImage(etc.get(1), 840, 245,null);
+                    g.drawImage(etc.get(2), 120, 190,null);
                     bs.show();
                     Toolkit.getDefaultToolkit().sync();
                     g.dispose();
@@ -382,14 +422,14 @@ public class Main extends JFrame implements KeyListener
     }
     public double getPlayerDamage()
     {
-        int x = 1;
+        double x = 0;
         if(getAccuracy()==1)
         x=100;
         if(getAccuracy()==2)
         x=50;
         if(getAccuracy()==3)
         x=20;
-        double damage = x + ((multiplier/100)*x);
+        double damage = x + (((double)multiplier/25)*x);
         return damage;
     }
     public int getAccuracy() //returns the accuray of the note
@@ -429,11 +469,6 @@ public class Main extends JFrame implements KeyListener
             ex.printStackTrace();
         }
     }
-    public void resetTrack()
-    {
-        track1=1;
-        track2=1;
-    }
     public void storeImages()
     {
         try
@@ -453,12 +488,14 @@ public class Main extends JFrame implements KeyListener
             images.add(ImageIO.read(new File("assets\\backgroundMid.jpg"))); //12
             images.add(ImageIO.read(new File("assets\\snailStand.png"))); //13
             images.add(ImageIO.read(new File("assets\\snailHit.png"))); //14
+            images.add(ImageIO.read(new File("assets\\stand.png"))); //15
         }
         catch (Exception e)
         {
         }
     }
-    public void storeImages2(String type, String monster)
+    /*
+    public void storeImages2(int track1, int track2, String type, String monster)
     {
         try
         {
@@ -467,10 +504,7 @@ public class Main extends JFrame implements KeyListener
             while(i>0)
             {
                 String a = "" + i;
-                String name = "";
                 images.add(ImageIO.read(new File(path + a + ".png")));
-                name = path + a + ".png";
-                fileNames[index] = name;
                 i++;
             }
         }
@@ -511,8 +545,77 @@ public class Main extends JFrame implements KeyListener
             if(track2==4)
             b="Attack";
             if(track2!=5)
-            storeImages2(b,a);
+            storeImages2(track1,track2,b,a);
         }
+    }
+    */
+    public void storeStandHit()
+    {
+        try
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                monsterStand.add(ImageIO.read(new File("Monsters\\Standing\\" + (monsters.get(i).getName())  + ".png")));
+                monsterHit.add(ImageIO.read(new File("Monsters\\Damaged\\" + (monsters.get(i).getName())  + ".png")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error");
+            e.printStackTrace();
+        }
+    }
+    public void storeNumbers()
+    {
+        try
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (i == 0)
+                    {
+                        numbers.add(ImageIO.read(new File("BetterNumbers\\Score" + j + ".png")));
+                    }
+                    else if(i == 1)
+                    {
+                        numbers.add(ImageIO.read(new File("BetterNumbers\\Accuracy" + j + ".png")));
+                    }
+                    else if(i == 2)
+                    {
+                        numbers.add(ImageIO.read(new File("BetterNumbers\\Multiplier" + j + ".png")));
+                    }
+                    else
+                    {
+                        numbers.add(ImageIO.read(new File("BetterNumbers\\CritDamage" + j + ".png")));
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("ha");
+        }
+    }
+    public void storeEtc()
+    {
+        try
+        {
+                etc.add(ImageIO.read(new File("BetterNumbers\\DecimalPoint.png")));
+                etc.add(ImageIO.read(new File("BetterNumbers\\Percent.png")));
+                etc.add(ImageIO.read(new File("BetterNumbers\\Combo.png")));
+        }
+        catch(Exception e)
+        {
+        }
+    }
+    public boolean checkDead()
+    {
+        if (monsters.get(monsterCounter).getHealth() <= 0)
+        {
+            return true;
+        }
+        return false;
     }
     public static void main(String[] args)
     {
@@ -525,8 +628,8 @@ public class Main extends JFrame implements KeyListener
         {
             g.drawImage(ImageIO.read(new File("assets\\background.jpg")), 0, 178,null);
             g.drawImage(ImageIO.read(new File("assets\\floor.png")), 0, 622,null);
-            g.drawImage(images.get(9), 350, 570,null);
-            g.drawImage(images.get(13), 405, 600,null);
+            g.drawImage(images.get(15), 350, 570,null);
+            g.drawImage(monsterStand.get(monsterCounter), 405, 360,null);
             /*
             Image icon = new ImageIcon(getClass().getResource("assets\\zakum.gif")).ge‌​tImage();
             g.drawImage(icon, 100, 200, this);
@@ -535,6 +638,7 @@ public class Main extends JFrame implements KeyListener
         }
         catch (Exception e)
         {
+            System.out.println("lol");
         }
     }
 }
